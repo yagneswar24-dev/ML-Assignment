@@ -1,41 +1,4 @@
-﻿"""
-Ridge vs Lasso vs Elastic Net, for both problems.
-
-EVERY degree the assignment permits is tested -- 1 to 10 for var1, 1 to 20 for
-var2 -- so each degree is either selected or rejected with a number beside it,
-rather than being left out of the search.
-
-All three methods fit exactly the same polynomial model.  They differ only in
-the penalty added to the squared-error objective:
-
-  Ridge        error + a * sum(b^2)       shrinks every coefficient toward 0,
-                                          but never exactly to 0 -> keeps all terms
-  Lasso        error + a * sum(|b|)       drives many coefficients to EXACTLY 0
-                                          -> deletes terms, giving a sparse model
-  Elastic Net  error + a * (r*sum(|b|) + (1-r)/2*sum(b^2))    a blend of the two
-
-Why the shapes differ: the derivative of b^2 is 2b, which shrinks to nothing as
-b approaches 0, so ridge never quite gets there.  The derivative of |b| is a
-constant +-1, which keeps pushing with full force right up to 0, so coefficients
-actually arrive and stay there.
-
-Consequence for cost: ridge has a one-line closed-form solution, so it is solved
-in one shot.  |b| is not differentiable at 0, so lasso has no closed form and
-must be solved iteratively (coordinate descent) -- which is why the high-degree
-lasso fits below are hundreds of times slower than the ridge ones.
-
-Each method gets its OWN alpha range, because the two penalties are on very
-different scales: sum(b^2) is much smaller than sum(|b|) for coefficients under
-1, so lasso needs an alpha roughly a thousand times smaller than ridge for a
-comparable effect.  A single shared grid would waste nearly all its points.
-
-Scoring: one 5-fold cross-validation, identical folds for every method, plus a
-held-out 20% that takes no part in the search.
-
-Runtime: roughly half an hour, dominated by lasso and elastic net at the
-highest degrees (var1 degree 10 has 8007 terms).
-"""
-import time, warnings
+﻿import time, warnings
 from pathlib import Path
 import numpy as np, pandas as pd
 from sklearn.exceptions import ConvergenceWarning
