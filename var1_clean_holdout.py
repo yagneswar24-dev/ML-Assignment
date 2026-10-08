@@ -1,20 +1,3 @@
-"""
-var1 - a genuinely independent generalisation estimate.
-
-PROBLEM with the earlier check in var1_model.py:
-  the degree/alpha grid search ran 5-fold CV over all 1000 training rows,
-  and the 200-row "holdout" was then carved out of those same 1000 rows.
-  Those 200 rows had therefore already influenced the choice of degree and
-  alpha, so scoring on them is not an independent test.
-
-FIX (the correct order):
-  1. split the data FIRST -> 800 "search pool" + 200 locked away
-  2. run the ENTIRE grid search using only the 800
-  3. score the winner on the 200, which nothing in step 2 ever touched
-
-This also re-checks whether degree 5 is chosen when only 800 rows are
-available, which tests how stable that choice is.
-"""
 from pathlib import Path
 import numpy as np, pandas as pd
 from sklearn.pipeline import Pipeline
